@@ -1,0 +1,15 @@
+services:
+    bugloos_error_response.api_exception_listener:
+        class: Bugloos\ErrorResponseBundle\EventListener\ApiExceptionListener
+        bind:
+            $normalizerFactory: '@Bugloos\ErrorResponseBundle\Factory\NormalizerFactory'
+            $logger: '@monolog.logger'
+            $env: '%kernel.environment%'
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, priority: 10 }
+
+    Bugloos\ErrorResponseBundle\Normalizer\FormExceptionNormalizer:
+        tags: [ 'serializer.normalizer' ]
+
+    Bugloos\ErrorResponseBundle\Factory\NormalizerFactory:
+        arguments: [ !tagged serializer.normalizer ]

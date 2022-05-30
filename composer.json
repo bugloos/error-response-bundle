@@ -1,0 +1,35 @@
+{
+    "name": "bugloos/error-response-bundle",
+    "description": "Error response handler",
+    "type": "symfony-bundle",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Mojtaba Gheytasi",
+            "email": "mojtaba.g@bugloos.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Bugloos\\ErrorResponseBundle\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bugloos\\ErrorResponseBundle\\Tests\\": "tests"
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "symfony/framework-bundle": "^4.4 | ^5.4"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpmd/phpmd": "^2.10",
+        "squizlabs/php_codesniffer": "^3.6",
+        "phpunit/phpunit": "^9.5"
+    }
+}
