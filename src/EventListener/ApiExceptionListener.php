@@ -89,9 +89,7 @@ final class ApiExceptionListener
             try {
                 $errors = $normalizer ? $normalizer->normalize($exception) : $exception->getErrors();
             } catch (ExceptionInterface $e) {
-                $this->logger->error($e);
-
-                $errors = $exception->getErrors(); //TODO: FIX
+                $errors = $exception->getErrors();
             }
         }
 
