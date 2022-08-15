@@ -5,6 +5,8 @@ Error Response Bundle
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bugloos/error-response-bundle/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/bugloos/error-response-bundle/?branch=main)
 [![Build Status](https://scrutinizer-ci.com/g/bugloos/error-response-bundle/badges/build.png?b=main)](https://scrutinizer-ci.com/g/bugloos/error-response-bundle/build-status/main)
 
+NOTE: <b>Documentation and automated tests are under construction</b>
+
 <h2>Installation</h2>
 
 ```bash
