@@ -10,33 +10,58 @@
 namespace Bugloos\ErrorResponseBundle\Normalizer;
 
 use Bugloos\ErrorResponseBundle\Exception\FormException;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\ErrorHandler\Exception\FlattenException;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 
 /**
  * @author Mojtaba Gheytasi <mjgheytasi@gmail.com>
  */
-class FormExceptionNormalizer implements NormalizerInterface
+class FormExceptionNormalizer extends AbstractErrorNormalizer
 {
-    public function normalize($exception, $format = null, array $context = []): array
+    public function normalize($object, $format = null, array $context = []): array
     {
-        $formattedErrors = [];
+        if (!$object instanceof FlattenException || !$context['exception'] instanceof FormException) {
+            throw new InvalidArgumentException(
+                sprintf('The object exception must implement "%s".', FormException::class)
+            );
+        }
+        $context += $this->defaultContext;
+        $exception = $context['exception'];
+        $debug = $this->debug && ($context['debug'] ?? true);
 
+        $context['errors'] = $this->extractFormErrors($exception);
+
+        return $this->createResponse($debug, $object, $context);
+    }
+
+    public function supportsNormalization($data, $format = null, array $context = []): bool
+    {
+        return $data instanceof FlattenException && $context['exception'] instanceof FormException;
+    }
+
+    /**
+     * @param FormException $exception
+     *
+     * @return array
+     *
+     * @author Morteza Karimi <me@morteza-karimi.ir>
+     *
+     * @since  v1.0
+     */
+    public function extractFormErrors(FormException $exception): array
+    {
+        $errors = [];
         foreach ($exception->getErrors() as $error) {
             $cause = $error->getCause();
 
             if ($cause && $cause->getPropertyPath()) {
-                $path = preg_replace('/^(data.)|(.data)|(\\])|(\\[)|children/', '', $cause->getPropertyPath());
-                $formattedErrors[$path] = $error->getMessage();
+                $path = preg_replace('/^((data.)|(.data)|(])|(\\[)|children)/', '', $cause->getPropertyPath());
+                $errors[$path][] = $error->getMessage();
             } else {
-                $formattedErrors[] = $error->getMessage();
+                $errors[] = $error->getMessage();
             }
         }
 
-        return $formattedErrors;
-    }
-
-    public function supportsNormalization($data, $format = null): bool
-    {
-        return $data instanceof FormException;
+        return $errors;
     }
 }
