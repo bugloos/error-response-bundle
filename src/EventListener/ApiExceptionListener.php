@@ -55,7 +55,7 @@ final class ApiExceptionListener
             $exception->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
 
         if (Response::HTTP_INTERNAL_SERVER_ERROR === $statusCode) {
-            $this->logger->error($exception);
+            $this->logger->error($exception->getMessage(), ['exception'=>$exception]);
 
             $response = $this->createInternalErrorResponse($statusCode, $exception);
 
@@ -107,3 +107,4 @@ final class ApiExceptionListener
         return $this->env === 'prod';
     }
 }
+
