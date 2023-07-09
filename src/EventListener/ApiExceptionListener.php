@@ -54,6 +54,10 @@ final class ApiExceptionListener
         $statusCode = $exception instanceof HttpExceptionInterface ?
             $exception->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
 
+        if ($exception instanceof RuntimeException) {
+            $statusCode = $exception->getCode();
+        }
+
         if (Response::HTTP_INTERNAL_SERVER_ERROR === $statusCode) {
             $this->logger->error($exception->getMessage(), ['exception'=>$exception]);
 
