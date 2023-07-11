@@ -24,7 +24,7 @@ class FormExceptionNormalizer implements NormalizerInterface
         foreach ($exception->getErrors() as $error) {
             $cause = $error->getCause();
 
-            if ($cause && $cause->getPropertyPath()) {
+            if ($cause && method_exists($cause, 'getPropertyPath') && $cause->getPropertyPath()) {
                 $path = preg_replace('/^(data.)|(.data)|(\\])|(\\[)|children/', '', $cause->getPropertyPath());
                 $formattedErrors[$path] = $error->getMessage();
             } else {
