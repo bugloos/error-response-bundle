@@ -54,7 +54,11 @@ final class ApiExceptionListener
         $statusCode = $exception instanceof HttpExceptionInterface ?
             $exception->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
 
-        if ($exception instanceof \RuntimeException) {
+        if (
+            $exception instanceof \RuntimeException &&
+            $exception->getCode() >= 100 &&
+            $exception->getCode() < 600
+        ) {
             $statusCode = $exception->getCode();
         }
 
